@@ -6,6 +6,8 @@
 #  (n  n )/  HardeningDoggy
 #
 
+# Source: https://github.com/ataumo/macos_hardening
+
 
 CYAN='\033[0;36m'
 RED='\033[0;31m'
@@ -204,7 +206,7 @@ function PrintAudit() {
         elif [[ ($(echo "$RecommendedValue" | cut -c1-2) == "> ") && ("$ReturnedValue" -gt $(echo "$RecommendedValue" | cut -c3-)) ]]; then
           POINTSARCHIVED=$((POINTSARCHIVED+4))
           SuccessMessage "$MESSAGE"
-        elif [[ ($(echo "$RecommendedValue" | cut -c1-3) == "!= ") && ("$ReturnedValue" -ne $(echo "$RecommendedValue" | cut -c4-)) ]]; then
+        elif [[ ($(echo "$RecommendedValue" | cut -c1-3) == "!= ") && ("$ReturnedValue" != $(echo "$RecommendedValue" | cut -c4-)) ]]; then
           POINTSARCHIVED=$((POINTSARCHIVED+4))
           SuccessMessage "$MESSAGE"
         else
@@ -316,7 +318,7 @@ done
 
 ## Define default CSV File configuration ##
 if [[ -z $INPUT ]]; then #if INPUT is empty
-  INPUT='finding_list.csv'
+  INPUT="$HOME/.config/doggy/finding_list.csv"
 fi
 
 set -- "${POSITIONAL[@]}" # restore positional parameters
@@ -666,6 +668,22 @@ do
         else
           ReturnedValue='activate'
         fi
+      
+      # STATUS/AUDIT
+      # Custom Command
+      #
+      elif [[ "$Method" == "CustomCommand" ]]; then
+
+        # command
+        COMMAND="$GetCommand"
+
+        ReturnedValue=$(eval "$COMMAND" 2>&1)
+        ReturnedExit=$?
+
+        if [[ "$ReturnedExit" == "$ExpectedExit" ]]; then
+          ReturnedExit=0
+        fi
+
 
 
       fi
