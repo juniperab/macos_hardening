@@ -3,7 +3,7 @@
 #
 #  ^. .^
 #  (=°=)
-#  (n  n )/  HardeningDoggy
+#  (n  n )/  HardeningPuppy
 #
 
 # Source: https://github.com/ataumo/macos_hardening
@@ -33,11 +33,11 @@ POINTSARCHIVED=0
 #
 function Usage() {
   echo "Usages: "
-  echo "  ./doggy.sh -h"
-  echo "  ./doggy.sh [mode]"
-  echo "  ./doggy.sh [mode [options]]"
-  echo "  ./doggy.sh [mode] [file <file.csv>]"
-  echo "  ./doggy.sh [mode [options]] [global options] [file <file.csv>]"
+  echo "  ./puppy.sh -h"
+  echo "  ./puppy.sh [mode]"
+  echo "  ./puppy.sh [mode [options]]"
+  echo "  ./puppy.sh [mode] [file <file.csv>]"
+  echo "  ./puppy.sh [mode [options]] [global options] [file <file.csv>]"
   echo ""
   echo "  -h | --help                   : help method"
   echo "  mode :"
@@ -122,7 +122,7 @@ function Intro() {
   echo ""
   echo "                             ^. .^                                   "
   echo "                             (=°=)                                   "
-  echo "                             (n  n )/  HardeningDoggy                "
+  echo "                             (n  n )/  HardeningPuppy                "
   echo ""
   echo ""
 }
@@ -318,7 +318,7 @@ done
 
 ## Define default CSV File configuration ##
 if [[ -z $INPUT ]]; then #if INPUT is empty
-  INPUT="$HOME/.config/doggy/finding_list.csv"
+  INPUT='lists/ataumo.csv'
 fi
 
 set -- "${POSITIONAL[@]}" # restore positional parameters
@@ -342,6 +342,12 @@ HOSTNAME=`hostname | awk -F. '{print $1}'`
 #                                 MAIN CODE                                    #
 #                                                                              #
 ################################################################################
+
+# Close any open System Preferences panes, to prevent them from overriding settings we’re about to change
+osascript -e 'tell application "System Preferences" to quit'
+
+# Ask for the administrator password upfront
+sudo -v
 
 #
 # Print Intro
